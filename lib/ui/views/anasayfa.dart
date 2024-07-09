@@ -1,4 +1,6 @@
+import 'package:bloc_pattern_kullanimi/ui/cubit/anasayfa_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Anasayfa extends StatefulWidget {
   const Anasayfa({super.key});
@@ -11,7 +13,6 @@ class _AnasayfaState extends State<Anasayfa> {
   var tfSayi1 = TextEditingController();
   var tfSayi2 = TextEditingController();
 
-  int sonuc = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +24,10 @@ class _AnasayfaState extends State<Anasayfa> {
           padding: const EdgeInsets.only(left: 50, right: 50),
           child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(sonuc.toString(), style: TextStyle(fontSize: 50),),
+              BlocBuilder<AnasayfaCubit, int>(  //dinleme yapısı
+                  builder: (context ,sonuc){
+                    return Text(sonuc.toString(), style: const TextStyle(fontSize: 50),);
+                  }),
               TextField(
                 controller: tfSayi1,
                 decoration: const InputDecoration(hintText: "Sayi 1.."),
@@ -35,30 +39,10 @@ class _AnasayfaState extends State<Anasayfa> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(onPressed: (){
-                    String alinanSayi1 = tfSayi1.text;
-                    String alinanSayi2 = tfSayi2.text;
-
-                    int sayi1 = int.parse(alinanSayi1);
-                    int sayi2 = int.parse(alinanSayi2);
-
-                    int toplama = sayi1 + sayi2;
-
-                    setState(() {
-                      sonuc = toplama;
-                    });
+                    context.read<AnasayfaCubit>().toplamaYap(tfSayi1.text, tfSayi2.text);
                   }, child: const Text("TOPLAMA")),
                   ElevatedButton(onPressed: (){
-                    String alinanSayi1 = tfSayi1.text;
-                    String alinanSayi2 = tfSayi2.text;
-
-                    int sayi1 = int.parse(alinanSayi1);
-                    int sayi2 = int.parse(alinanSayi2);
-
-                    int carpma = sayi1 * sayi2;
-
-                    setState(() {
-                      sonuc = carpma;
-                    });
+                    context.read<AnasayfaCubit>().carpmaYap(tfSayi1.text, tfSayi2.text);
                   }, child: const Text("CARPMA")),
                 ],
               )
